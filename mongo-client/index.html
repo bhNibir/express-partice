@@ -15,8 +15,10 @@
     <p id="userName"></p>
     <div class="container">
         <div class="row">
-            <input type="text" class="input-group" id='user'>
-            <button class="btn btn-danger" id='addUser'>Add User</button>
+            <input type="text" class="input-group" id='name' placeholder="Product Name">
+            <input type="text" class="input-group" id='price' placeholder="Price">
+            <input type="text" class="input-group" id='stock' placeholder="Stock">
+            <button class="btn btn-danger" id='addProduct'>Add Product</button>
         </div>
     </div>
 
@@ -27,14 +29,17 @@
         .then(data => document.getElementById('userName').innerHTML = data.name)
 
         //post Data
-        const btnAddUser = document.getElementById("addUser")
+        const btnAddUser = document.getElementById("addProduct")
         btnAddUser.addEventListener('click', () => {
-            const name = document.getElementById('user').value
-            const user = {name}
+            const name = document.getElementById('name').value
+            const price = document.getElementById('price').value
+            const stock = document.getElementById('stock').value
+            const product = {name, price, stock}
+            console.log(product)
             //sent data server
-            fetch('http://localhost:3000/adduser',{
+            fetch('http://localhost:3000/addProduct',{
                 method: 'POST',
-                body: JSON.stringify(user),
+                body: JSON.stringify(product),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                   }
