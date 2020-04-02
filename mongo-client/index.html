@@ -20,13 +20,32 @@
             <input type="text" class="input-group" id='stock' placeholder="Stock">
             <button class="btn btn-danger" id='addProduct'>Add Product</button>
         </div>
+        <p style="display: none; color:green;" id="message"><small>Added Product SuccessFully</small></p>
+        <ul id="product-container">
+
+        </ul>
     </div>
 
     <script>
         // get Data
-        fetch("http://localhost:3000/user/1")
+        fetch("http://localhost:3000/product")
         .then(res => res.json())
-        .then(data => document.getElementById('userName').innerHTML = data.name)
+        .then(data => displayProduct(data))
+
+        const displayProduct = (data) =>{
+          const productContainer = document.getElementById('product-container')
+          for(let i=0; i<data.length; i++){
+            const product = data[i]
+            productShow(product, productContainer)
+          }
+                  
+        }
+
+        const productShow = (product, productContainer) =>{
+          const item = document.createElement('li')
+          item.innerHTML = `${product.name}, $${product.price}, Available${product.stock}`  
+          productContainer.appendChild(item)
+        }
 
         //post Data
         const btnAddUser = document.getElementById("addProduct")
@@ -45,10 +64,22 @@
                   }
             })
             .then(res => res.json())
-            .then(data => show(data))
+            .then(data => {
+              show(data)
+              document.getElementById('name').value = ''
+              document.getElementById('price').value = ''
+              document.getElementById('stock').value = ''
+              const message = document.getElementById('message')
+              message.style.display = 'block'
+              setTimeout(()=>{
+              message.style.display = 'none'
+              }, 5000)
+            })
 
-            const show = (user) => {
-                document.getElementById('userName').innerHTML = user.name
+            const show = (product) => {
+              const productContainer = document.getElementById('product-container')
+              productShow(product, productContainer)              
+              document.getElementById('userName').innerHTML = product.name
             }
 
         }) 
